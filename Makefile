@@ -2,7 +2,7 @@ program_NAME := runmoody
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = ${SOURCES:.cpp=.o}
 
-CPPFLAGS = -g
+CPPFLAGS = -g -Isrc
 
 all: $(program_NAME)
 

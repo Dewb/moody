@@ -3,7 +3,24 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <cstring>
 
+#define OSC_OUTPUT_ENABLED 0
+
+#if OSC_OUTPUT_ENABLED
+#include "ip/IpEndpointName.h"
+#include "ip/IpEndpointName.cpp"
+#include "ip/UdpSocket.h"
+#include "ip/posix/UdpSocket.cpp"
+#include "ip/posix/NetworkingUtils.cpp"
+#include "osc/OscOutboundPacketStream.h"
+#include "osc/OscOutboundPacketStream.cpp"
+#include "osc/OscTypes.cpp"
+
+UdpTransmitSocket oscSocket(IpEndpointName("127.0.0.1", 7000));
+char oscBuffer[1024];
+osc::OutboundPacketStream oscStream(oscBuffer, 1024);
+#endif
 
 std::vector<FixtureTile*> strips;
 std::vector<PowerSupply*> supplies;
@@ -90,20 +107,32 @@ void createNetwork(const uint8_t* data, int dataWidth, int dataHeight)
     END_POWER_NODE
     
     // Right outer
-    BEGIN_POWER_NODE("10.32.0.71", 51, 306, DIRECTION_RIGHT)
-    CHANNEL(1, 3)
-    CHANNEL(2, 2)
+    BEGIN_POWER_NODE("10.32.0.38", 51, 306, DIRECTION_RIGHT)
+    CHANNEL(1, 2)
+    CHANNEL(2, 1)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.02", 51, 306, DIRECTION_RIGHT)
-    CHANNEL(1, 1)
-    CHANNEL(2, 0)
+    BEGIN_POWER_NODE("10.32.0.20", 51, 306, DIRECTION_RIGHT)
+    CHANNEL(1, 0)
+    CHANNEL(2, 3)
     END_POWER_NODE
 }
 
-void applyFixups(uint8_t* buffer)
+void swap(uint8_t* buffer, int width, int height, int x, int y1, int y2)
+{
+    uint8_t temp[3];
+    memcpy(&temp, buffer + width * 3 * y1 + x, 3);
+    memcpy(buffer + width * 3 * y1 + x, buffer + width * 3 * y2 + x, 3);
+    memcpy(buffer + width * 3 * y2 + x, &temp, 3);
+}
+
+void applyFixups(uint8_t* buffer, int width, int height)
 {
     // swap any crossed middle pixels here
+    for (int ii = 107; ii > 94; ii--)
+    {
+        swap(buffer, width, height, ii, 1, 2);
+    }
 }
 
 int main()
@@ -120,11 +149,33 @@ int main()
         clearEffect(buffer);
         
         //runTestEffect(buffer);
-        runFlameEffect(buffer);
-        //runWaterfallEffect(buffer);
+        //runFlameEffect(buffer);
+        runWaterfallEffect(buffer);
 
-        applyFixups(buffer);
+        applyFixups(buffer, width, height);
         
+#if OSC_OUTPUT_ENABLED
+        for (int ii = 0; ii < width; ii++)
+        {
+            for (int jj = 0; jj < height; jj++)
+            {
+                oscStream << osc::BeginBundleImmediate;
+                oscStream << osc::BeginMessage("led");
+                oscStream << ii * 3 << (height - jj - 1) * 10 << (ii + 1) * 3 << (height - jj) * 10;
+                int s = (jj * width + ii) * 3;
+                for (int c = 0; c < 3; c++)
+                {
+                    oscStream << buffer[s + c];
+                }
+                oscStream << osc::EndMessage;
+                oscStream << osc::EndBundle;
+                oscSocket.Send(oscStream.Data(), oscStream.Size());
+                oscStream.Clear();
+            }
+        }
+        
+#endif
+                
         for (int ii = 0; ii < supplies.size(); ii++)
         {
             supplies[ii]->go();
