@@ -60,6 +60,8 @@ public:
 
     virtual void updateFrame(uint8_t* packets) const;
     virtual std::string getName() const;
+    
+    void setFlippedX(bool flip) { _flippedX = flip; }
 
 protected:
     int _startChannel;
@@ -73,6 +75,7 @@ protected:
     int _sourceWidth;
     int _sourceHeight;
     int _sourceChannels;
+    bool _flippedX;
 };
 
 class PowerSupply

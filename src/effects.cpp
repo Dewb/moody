@@ -9,7 +9,7 @@
 #include <cstring>
 
 #define SIMULATION_HEIGHT 100
-#define SIMULATION_WIDTH 50
+#define SIMULATION_WIDTH 306
 #define NUM_PARTICLES 180
 
 int bufferWidth = 0;
@@ -120,11 +120,11 @@ void runFlameEffect(uint8_t* data)
     //uint8_t v = (sin(t/100000.0)+1) * 0.5 * 170 + 85;
     HsvColor color;
     
-    float spreadtime = 4.0;
-    float totaltime = 16.0;
+    float spreadtime = 16.0;
+    float totaltime = 64.0;
     int cycle = lfo_ramp(totaltime) * totaltime;
     
-    int wavefront = bufferWidth * lfo_ramp(spreadtime * bufferWidth/50);
+    int wavefront = bufferWidth * lfo_ramp(spreadtime);
     float attenuate = 1;
     if (cycle >= spreadtime)
     {
@@ -145,13 +145,16 @@ void runFlameEffect(uint8_t* data)
             color.v = v;
             
             v -= 20 + rand() % 40;
-         
-            if (cycle > totaltime - spreadtime || ii > wavefront + 2)
+            
+            if (ii > wavefront + 3)
             {
                 if (jj == 0)
                 {
                     color.v /= 2;
-                    paintHSV(data, ii, jj, color);
+                }
+                else
+                {
+                    continue;
                 }
             }
             else if (ii > wavefront + 1)
@@ -159,18 +162,19 @@ void runFlameEffect(uint8_t* data)
                 if (jj < 3)
                 {
                     color.v *= lfo_ramp(spreadtime/50, jj);
-                    paintHSV(data, ii, jj, color);
+                }
+                else
+                {
+                    continue;
                 }
             }
             else if (ii > wavefront)
             {
                 color.v *= lfo_ramp(0.3, jj);
-                paintHSV(data, ii, jj, color);
             }
-            else
-            {
-                paintHSV(data, ii, jj, color);
-            }
+            
+            paintHSV(data, ii, jj, color);
+            
         }
     }
 }
