@@ -1,0 +1,7 @@
+*.o
+xcuserdata
+Moody Lights/Build/
+Moody Lights/DerivedData/
+Moody Lights/Logs/
+Moody Lights/TextIndex
+
