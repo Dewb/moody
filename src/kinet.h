@@ -12,6 +12,7 @@
 
 #include <list>
 #include <string>
+#include <stdint.h>
 
 using std::list;
 using std::string;

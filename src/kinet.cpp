@@ -15,6 +15,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #define OLD_PROTOCOL 0 
 #define ENABLE_LOGGING 0

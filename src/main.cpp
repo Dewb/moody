@@ -1,6 +1,7 @@
 #include "kinet.h"
 #include "effects.h"
 #include <vector>
+#include <cstdlib>
 
 std::vector<FixtureTile*> strips;
 std::vector<PowerSupply*> supplies;

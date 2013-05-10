@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <cstring>
 
 #define SIMULATION_HEIGHT 100
 #define SIMULATION_WIDTH 50
