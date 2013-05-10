@@ -1,5 +1,5 @@
 program_NAME := runmoody
-SOURCES = $(wildcard *.cpp)
+SOURCES = $(wildcard src/*.cpp)
 OBJECTS = ${SOURCES:.cpp=.o}
 
 CPPFLAGS = -g

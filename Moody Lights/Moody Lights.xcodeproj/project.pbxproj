@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		5B1BEF8E173CA4C8004989D4 /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cpp; path = ../color.cpp; sourceTree = "<group>"; };
-		5B1BEF8F173CA4C8004989D4 /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = color.h; path = ../color.h; sourceTree = "<group>"; };
-		5B1BEF90173CA4C8004989D4 /* effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../effects.cpp; sourceTree = "<group>"; };
-		5B1BEF91173CA4C8004989D4 /* effects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effects.h; path = ../effects.h; sourceTree = "<group>"; };
-		5B1BEF92173CA4C8004989D4 /* kinet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = kinet.cpp; path = ../kinet.cpp; sourceTree = "<group>"; };
-		5B1BEF93173CA4C8004989D4 /* kinet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kinet.h; path = ../kinet.h; sourceTree = "<group>"; };
-		5B1BEF94173CA4C8004989D4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
+		5B1BEF8E173CA4C8004989D4 /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cpp; path = ../src/color.cpp; sourceTree = "<group>"; };
+		5B1BEF8F173CA4C8004989D4 /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = color.h; path = ../src/color.h; sourceTree = "<group>"; };
+		5B1BEF90173CA4C8004989D4 /* effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../src/effects.cpp; sourceTree = "<group>"; };
+		5B1BEF91173CA4C8004989D4 /* effects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effects.h; path = ../src/effects.h; sourceTree = "<group>"; };
+		5B1BEF92173CA4C8004989D4 /* kinet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = kinet.cpp; path = ../src/kinet.cpp; sourceTree = "<group>"; };
+		5B1BEF93173CA4C8004989D4 /* kinet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kinet.h; path = ../src/kinet.h; sourceTree = "<group>"; };
+		5B1BEF94173CA4C8004989D4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = "<group>"; };
 		5B1BEF95173CA4C8004989D4 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
