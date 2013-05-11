@@ -282,17 +282,34 @@ void FixtureTile::updateFrame(uint8_t* packets) const
     if (_sourceData == NULL)
         return;
     
-    int tileX, tileY;
+    int tileX, tileY, stepX, stepY, startX, startY;
     uint8_t* pIndex;
     
     //tileX = _fixtureWidth-1;
     //tileY = _fixtureHeight/2-1;
-    tileX = 0;
-    tileY = 0;
+    
+    if (_flippedX)
+    {
+        startX = _fixtureWidth - 1;
+        stepX = -1;
+    }
+    else
+    {
+        startX = 0;
+        stepX = 1;
+    }
+    
+    startY = 0;
+    stepY = 1;
+    
+    tileX = startX;
+    tileY = startY;
+    
     pIndex = packets + (HEADER_SIZE + DATA_SIZE) * (_startChannel-1) + HEADER_SIZE;
     
     int xscale = (int)floor(_videoW/(_fixtureWidth*1.0));
     int yscale = (int)floor(_videoH/(_fixtureHeight*1.0));
+    
 
     while (tileY < _fixtureHeight)
     {
@@ -302,12 +319,12 @@ void FixtureTile::updateFrame(uint8_t* packets) const
         int scale = 8;
         memcpy(pIndex, _sourceData + (_videoX + tileX*xscale + (_videoY + tileY*yscale) * _sourceWidth) * _sourceChannels, 3);
         pIndex+=3;
-        tileX++;
+        tileX += stepX;
 
-        if (tileX >= _fixtureWidth)
+        if (tileX >= _fixtureWidth || tileX < 0)
         {
-            tileX = 0;
-            tileY++;
+            tileX = startX;
+            tileY += stepY;
         }
     }
     

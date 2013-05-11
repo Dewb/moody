@@ -9,7 +9,7 @@
 #include <cstring>
 
 #define SIMULATION_HEIGHT 100
-#define SIMULATION_WIDTH 50
+#define SIMULATION_WIDTH 306
 #define NUM_PARTICLES 180
 
 int bufferWidth = 0;
