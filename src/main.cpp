@@ -37,67 +37,67 @@ void createNetwork(const uint8_t* data, int dataWidth, int dataHeight)
     // Left outer
     BEGIN_POWER_NODE("10.32.0.05", 51, 50, DIRECTION_LEFT)
     CHANNEL(1, 0)
-    CHANNEL(2, 1)
+    CHANNEL(2, 2)
     END_POWER_NODE
     
     BEGIN_POWER_NODE("10.32.0.06", 51, 50, DIRECTION_LEFT)
-    CHANNEL(1, 2)
+    CHANNEL(1, 1)
     CHANNEL(2, 3)
     END_POWER_NODE
     
     // Left middle outer
-    BEGIN_POWER_NODE("10.32.0.71", 51, 101, DIRECTION_LEFT)
+    BEGIN_POWER_NODE("10.32.0.44", 51, 101, DIRECTION_LEFT)
     CHANNEL(1, 0)
     CHANNEL(2, 1)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.02", 51, 101, DIRECTION_LEFT)
+    BEGIN_POWER_NODE("10.32.0.17", 51, 101, DIRECTION_LEFT)
     CHANNEL(1, 2)
     CHANNEL(2, 3)
     END_POWER_NODE
     
     // Left middle inner
-    BEGIN_POWER_NODE("10.32.0.38", 51, 102, DIRECTION_RIGHT)
+    BEGIN_POWER_NODE("10.32.0.13", 51, 153, DIRECTION_RIGHT)
     CHANNEL(1, 0)
     CHANNEL(2, 1)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.44", 51, 102, DIRECTION_RIGHT)
+    BEGIN_POWER_NODE("10.32.0.12", 51, 153, DIRECTION_RIGHT)
     CHANNEL(1, 2)
     CHANNEL(2, 3)
     END_POWER_NODE
     
     // Right middle inner
-    BEGIN_POWER_NODE("10.32.0.15", 51, 203, DIRECTION_LEFT)
-    CHANNEL(1, 0)
-    CHANNEL(2, 1)
+    BEGIN_POWER_NODE("10.32.0.70", 51, 203, DIRECTION_LEFT)
+    CHANNEL(1, 1)
+    CHANNEL(2, 0)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.14", 51, 203, DIRECTION_LEFT)
+    BEGIN_POWER_NODE("10.32.0.16", 51, 203, DIRECTION_LEFT)
     CHANNEL(1, 2)
     CHANNEL(2, 3)
     END_POWER_NODE
     
     // Right middle outer
-    BEGIN_POWER_NODE("10.32.0.16", 51, 204, DIRECTION_RIGHT)
-    CHANNEL(1, 0)
-    CHANNEL(2, 1)
+    BEGIN_POWER_NODE("10.32.0.15", 51, 255, DIRECTION_RIGHT)
+    CHANNEL(1, 1)
+    CHANNEL(2, 0)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.70", 51, 204, DIRECTION_RIGHT)
+    BEGIN_POWER_NODE("10.32.0.14", 51, 255, DIRECTION_RIGHT)
     CHANNEL(1, 2)
     CHANNEL(2, 3)
     END_POWER_NODE
     
     // Right outer
-    BEGIN_POWER_NODE("10.32.0.12", 51, 255, DIRECTION_RIGHT)
-    CHANNEL(1, 0)
-    CHANNEL(2, 1)
+    BEGIN_POWER_NODE("10.32.0.71", 51, 306, DIRECTION_RIGHT)
+    CHANNEL(1, 3)
+    CHANNEL(2, 2)
     END_POWER_NODE
     
-    BEGIN_POWER_NODE("10.32.0.13", 51, 255, DIRECTION_RIGHT)
-    CHANNEL(1, 2)
-    CHANNEL(2, 3)
+    BEGIN_POWER_NODE("10.32.0.02", 51, 306, DIRECTION_RIGHT)
+    CHANNEL(1, 1)
+    CHANNEL(2, 0)
     END_POWER_NODE
 }
 
@@ -119,8 +119,8 @@ int main()
     {
         clearEffect(buffer);
         
-        runTestEffect(buffer);
-        //runFlameEffect(buffer);
+        //runTestEffect(buffer);
+        runFlameEffect(buffer);
         //runWaterfallEffect(buffer);
 
         applyFixups(buffer);
