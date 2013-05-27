@@ -4,6 +4,22 @@
 #include <cstdlib>
 #include <iostream>
 
+#define OSC_OUTPUT_ENABLED 1
+
+#if OSC_OUTPUT_ENABLED
+#include "ip/IpEndpointName.h"
+#include "ip/IpEndpointName.cpp"
+#include "ip/UdpSocket.h"
+#include "ip/posix/UdpSocket.cpp"
+#include "ip/posix/NetworkingUtils.cpp"
+#include "osc/OscOutboundPacketStream.h"
+#include "osc/OscOutboundPacketStream.cpp"
+#include "osc/OscTypes.cpp"
+
+UdpTransmitSocket oscSocket(IpEndpointName("127.0.0.1", 7000));
+char oscBuffer[1024];
+osc::OutboundPacketStream oscStream(oscBuffer, 1024);
+#endif
 
 std::vector<FixtureTile*> strips;
 std::vector<PowerSupply*> supplies;
@@ -123,13 +139,35 @@ int main()
         runFlameEffect(buffer);
         //runWaterfallEffect(buffer);
 
+#if OSC_OUTPUT_ENABLED
+        for (int ii = 0; ii < width; ii++)
+        {
+            for (int jj = 0; jj < height; jj++)
+            {
+                oscStream << osc::BeginBundleImmediate;
+                oscStream << osc::BeginMessage("led");
+                oscStream << ii * 3 << (height - jj - 1) * 10 << (ii + 1) * 3 << (height - jj) * 10;
+                int s = (jj * width + ii) * 3;
+                for (int c = 0; c < 3; c++)
+                {
+                    oscStream << buffer[s + c];
+                }
+                oscStream << osc::EndMessage;
+                oscStream << osc::EndBundle;
+                oscSocket.Send(oscStream.Data(), oscStream.Size());
+                oscStream.Clear();
+            }
+        }
+        
+#endif
+        
         applyFixups(buffer);
         
         for (int ii = 0; ii < supplies.size(); ii++)
         {
             supplies[ii]->go();
         }
-        usleep(70);
+        usleep(70770);
     }
     
     free(buffer);
