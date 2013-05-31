@@ -2,18 +2,41 @@
 #include "color.h"
 
 #include <vector>
-#include <deque>
 #include <algorithm>
 #include <cmath>
 #include <ctime>
 #include <cstring>
+#include <iostream>
+#include <sys/time.h>
 
 #define SIMULATION_HEIGHT 100
+#define SIMULATION_THRESH 150.0
 #define SIMULATION_WIDTH 306
-#define NUM_PARTICLES 180
+#define NUM_PARTICLES 400
+#define MIN_PARTICLES 50
+
+#define CREATING 0
+#define DECAYING 1
 
 int bufferWidth = 0;
 int bufferHeight = 0;
+
+int mode = CREATING;
+
+float frand(float max = 1.0)
+{
+    return max * (float)rand() / (float)RAND_MAX;
+}
+
+void paintHSV(uint8_t* data, int x, int y, HsvColor& hsv)
+{
+    RgbColor rgb = HsvToRgb(hsv);
+    int index = (x + bufferWidth * y) * 3;
+    
+    data[index+0] = data[index+0] + rgb.r;
+    data[index+1] = data[index+1] + rgb.g;
+    data[index+2] = data[index+2] + rgb.b;
+}
 
 class Particle
 {
@@ -22,38 +45,93 @@ public:
     float height;
     float velocity;
     HsvColor color;
-    int randomOffset;
+
+protected:
+    bool active;
+    
+public:
+    static int activeCount;
 
     Particle()
     {
+        active = false;
+    }
+    
+    bool isActive() const { return active; }
+    
+    void setActive(bool bActive)
+    {
+        if (active != bActive)
+        {
+            if (bActive)
+                activeCount++;
+            else
+                activeCount--;
+        }
+        active = bActive;
     }
 
     void launch()
     {
+        static float hue = 0;
+        
+        if (frand() < 0.009)
+        {
+            height = 0;
+            velocity = -(frand(1.7) + 1.3);
+            color.h = (int)(hue + 40) % 255;
+        } else {
+            height = SIMULATION_HEIGHT;
+            velocity = frand(2.0) + 0.4;
+            color.h = hue;
+        }
+        
         slot = rand() % SIMULATION_WIDTH;
-        height = SIMULATION_HEIGHT;
-        velocity = 0.3;
-        color.h = 255;
-        color.s = 200;
-        color.v = 180;
-        randomOffset = rand() % 10000;
+        color.s = 240;
+        color.v = 255;
+        
+        setActive(true);
+        
+        hue += 0.018;
+        if (hue > 255) hue = 0;
     }
     
     void update()
     {
-        height += velocity;
-        if (height <= 0 || height >= SIMULATION_HEIGHT)
-            launch();
+        if (height > -SIMULATION_THRESH &&
+            height < SIMULATION_THRESH)
+        {
+            height -= velocity;
+        }
+        else
+        {
+            setActive(false);
+        }
     }
     
     void render(uint8_t* data)
     {
-        
+        for (int jj = 0; jj < bufferHeight; jj++)
+        {
+            float h1 = height / (SIMULATION_HEIGHT * 1.0);
+            float h2 = jj / (bufferHeight * 1.0);
+            float d = fabs(h1 - h2);
+            
+            HsvColor c = color;
+            if (d > 0.4)
+                continue;
+            else if (d > 0.05)
+                c.v = c.v * (1 - d);
+            
+            paintHSV(data, slot, jj, c);
+        }
+     
     }
     
 };
 
-std::deque<int> slotQueue;
+int Particle::activeCount = 0;
+
 std::vector<float> slotSeeds;
 std::vector<Particle> particles;
 
@@ -61,50 +139,77 @@ std::vector<Particle> particles;
 void initEffects(int width, int height)
 {
     bufferWidth = width;
-
     bufferHeight = height;
+    
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    
+    unsigned int seed = (unsigned int)((now.tv_sec + 1) * (now.tv_usec + 1));
+    srand(seed);
     
     for (int ii = 0; ii < width; ii++)
     {
-        slotQueue.push_back(ii);
-        slotSeeds.push_back((float)rand() / (float)RAND_MAX);
+        slotSeeds.push_back(frand());
     }
-    std::random_shuffle(slotQueue.begin(), slotQueue.end());
+    
+    particles.reserve(NUM_PARTICLES);
+    
 }
 
-void paintHSV(uint8_t* data, int x, int y, HsvColor& hsv)
-{
-    RgbColor rgb = HsvToRgb(hsv);
-    int index = (x + bufferWidth * y) * 3;
-
-    data[index+0] = data[index+0] + rgb.r;
-    data[index+1] = data[index+1] + rgb.g;
-    data[index+2] = data[index+2] + rgb.b;
-}
 
 void runWaterfallEffect(uint8_t* data)
 {
-    int radius = 10;
-    if (particles.size() < NUM_PARTICLES)
+    static int spawndelay = 0;
+        
+    if (Particle::activeCount == NUM_PARTICLES)
     {
-        particles.push_back(Particle());
-        particles.rbegin()->launch();
+        mode = DECAYING;
+    }
+    else if (Particle::activeCount < MIN_PARTICLES)
+    {
+        mode = CREATING;
     }
     
-    for (int pp = 0; pp < particles.size(); pp++)
+    int targetParticles = Particle::activeCount;
+    
+    if (spawndelay == 0)
     {
-        particles[pp].update();
-        particles[pp].render(data);
-        
-        for (int jj = 0; jj < bufferHeight; jj++)
+        if (mode == CREATING)
         {
-            float d = SIMULATION_HEIGHT / (bufferHeight * 1.0) - particles[jj].height;
-            float dsqr = pow(d, 2);
-            float rsqr = pow(radius, 2);
-            float v = 1.0 / (1.0 + (2.0/radius) * d + dsqr/(rsqr*1.0));
-            particles[jj].color.v = v;
-            paintHSV(data, particles[pp].slot, jj, particles[pp].color);
+            if (particles.size() < NUM_PARTICLES)
+            {
+                Particle p;
+                p.launch();
+                particles.push_back(p);
+            }
+            targetParticles += 1;
         }
+        else
+        {
+            targetParticles -= 5;
+        }
+        spawndelay = 20;
+    } else {
+        spawndelay--;
+    }
+        
+    std::vector<Particle>::iterator p = particles.begin();
+    
+    while (p != particles.end())
+    {
+        p->update();
+        if (!(p->isActive()))
+        {
+            if (Particle::activeCount < targetParticles) {
+                p->launch();
+            }
+        }
+        
+        if (p->isActive())
+        {
+            p->render(data);
+        }
+        p++;
     }
 }
 

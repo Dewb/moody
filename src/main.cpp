@@ -136,8 +136,8 @@ int main()
         clearEffect(buffer);
         
         //runTestEffect(buffer);
-        runFlameEffect(buffer);
-        //runWaterfallEffect(buffer);
+        //runFlameEffect(buffer);
+        runWaterfallEffect(buffer);
 
 #if OSC_OUTPUT_ENABLED
         for (int ii = 0; ii < width; ii++)
@@ -167,7 +167,7 @@ int main()
         {
             supplies[ii]->go();
         }
-        usleep(70770);
+        usleep(1070);
     }
     
     free(buffer);
