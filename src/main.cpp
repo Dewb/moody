@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <cstring>
 
 #define OSC_OUTPUT_ENABLED 1
 
@@ -107,19 +108,31 @@ void createNetwork(const uint8_t* data, int dataWidth, int dataHeight)
     
     // Right outer
     BEGIN_POWER_NODE("10.32.0.19", 51, 306, DIRECTION_RIGHT)
-    CHANNEL(1, 2)
-    CHANNEL(2, 3)
+    CHANNEL(1, 1)
+    CHANNEL(2, 2)
     END_POWER_NODE
     
     BEGIN_POWER_NODE("10.32.0.20", 51, 306, DIRECTION_RIGHT)
     CHANNEL(1, 0)
-    CHANNEL(2, 1)
+    CHANNEL(2, 3)
     END_POWER_NODE
 }
 
-void applyFixups(uint8_t* buffer)
+void swap(uint8_t* buffer, int width, int height, int x, int y1, int y2)
+{
+    uint8_t temp[3];
+    memcpy(&temp, buffer + width * 3 * y1 + x, 3);
+    memcpy(buffer + width * 3 * y1 + x, buffer + width * 3 * y2 + x, 3);
+    memcpy(buffer + width * 3 * y2 + x, &temp, 3);
+}
+
+void applyFixups(uint8_t* buffer, int width, int height)
 {
     // swap any crossed middle pixels here
+    for (int ii = 107; ii > 94; ii--)
+    {
+        swap(buffer, width, height, ii, 1, 2);
+    }
 }
 
 int main()
@@ -139,6 +152,8 @@ int main()
         //runFlameEffect(buffer);
         runWaterfallEffect(buffer);
 
+        applyFixups(buffer, width, height);
+        
 #if OSC_OUTPUT_ENABLED
         for (int ii = 0; ii < width; ii++)
         {
@@ -160,14 +175,12 @@ int main()
         }
         
 #endif
-        
-        applyFixups(buffer);
-        
+                
         for (int ii = 0; ii < supplies.size(); ii++)
         {
             supplies[ii]->go();
         }
-        usleep(1070);
+        usleep(70);
     }
     
     free(buffer);

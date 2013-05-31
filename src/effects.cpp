@@ -28,14 +28,19 @@ float frand(float max = 1.0)
     return max * (float)rand() / (float)RAND_MAX;
 }
 
+int fudgemax(int a, int b)
+{
+    return (a > b) ? a + (b >> 4) : b + (a >> 4);
+}
+
 void paintHSV(uint8_t* data, int x, int y, HsvColor& hsv)
 {
     RgbColor rgb = HsvToRgb(hsv);
     int index = (x + bufferWidth * y) * 3;
     
-    data[index+0] = data[index+0] + rgb.r;
-    data[index+1] = data[index+1] + rgb.g;
-    data[index+2] = data[index+2] + rgb.b;
+    data[index+0] = fudgemax(data[index+0], rgb.r);
+    data[index+1] = fudgemax(data[index+1], rgb.g);
+    data[index+2] = fudgemax(data[index+2], rgb.b);
 }
 
 class Particle
@@ -75,14 +80,14 @@ public:
     {
         static float hue = 0;
         
-        if (frand() < 0.009)
+        if (frand() < 0.012)
         {
             height = 0;
-            velocity = -(frand(1.7) + 1.3);
+            velocity = -(frand(0.17) + 0.12);
             color.h = (int)(hue + 40) % 255;
         } else {
             height = SIMULATION_HEIGHT;
-            velocity = frand(2.0) + 0.4;
+            velocity = frand(0.20) + 0.04;
             color.h = hue;
         }
         
@@ -111,9 +116,9 @@ public:
     
     void render(uint8_t* data)
     {
+        float h1 = height / (SIMULATION_HEIGHT * 1.0);
         for (int jj = 0; jj < bufferHeight; jj++)
         {
-            float h1 = height / (SIMULATION_HEIGHT * 1.0);
             float h2 = jj / (bufferHeight * 1.0);
             float d = fabs(h1 - h2);
             
@@ -121,7 +126,7 @@ public:
             if (d > 0.4)
                 continue;
             else if (d > 0.05)
-                c.v = c.v * (1 - d);
+                c.v = c.v * (1 - 2 * d);
             
             paintHSV(data, slot, jj, c);
         }
@@ -188,7 +193,7 @@ void runWaterfallEffect(uint8_t* data)
         {
             targetParticles -= 5;
         }
-        spawndelay = 20;
+        spawndelay = 80;
     } else {
         spawndelay--;
     }
