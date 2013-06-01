@@ -28,6 +28,11 @@ float frand(float max = 1.0)
     return max * (float)rand() / (float)RAND_MAX;
 }
 
+float frandplusminus(float abs = 1.0)
+{
+    return 2 * abs * ((float)rand() / (float)RAND_MAX) - abs;
+}
+
 int fudgemax(int a, int b)
 {
     return (a > b) ? a + (b >> 4) : b + (a >> 4);
@@ -83,12 +88,12 @@ public:
         if (frand() < 0.012)
         {
             height = 0;
-            velocity = -(frand(0.17) + 0.12);
+            velocity = -(frand(0.19) + 0.10);
             color.h = (int)(hue + 40) % 255;
         } else {
             height = SIMULATION_HEIGHT;
-            velocity = frand(0.20) + 0.04;
-            color.h = hue;
+            velocity = frand(0.22) + 0.02;
+            color.h = (int)(hue + frand(8.0));
         }
         
         slot = rand() % SIMULATION_WIDTH;
@@ -124,9 +129,15 @@ public:
             
             HsvColor c = color;
             if (d > 0.4)
+            {
                 continue;
+            }
             else if (d > 0.05)
+            {
                 c.v = c.v * (1 - 2 * d);
+                float newhue = c.h + frandplusminus(frand(1.0) < 0.03 ? 9.0 : 3.5) * d;
+                c.h = newhue + 256 % 256;
+            }
             
             paintHSV(data, slot, jj, c);
         }
@@ -193,7 +204,7 @@ void runWaterfallEffect(uint8_t* data)
         {
             targetParticles -= 5;
         }
-        spawndelay = 80;
+        spawndelay = 65;
     } else {
         spawndelay--;
     }
