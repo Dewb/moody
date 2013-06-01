@@ -107,9 +107,9 @@ void createNetwork(const uint8_t* data, int dataWidth, int dataHeight)
     END_POWER_NODE
     
     // Right outer
-    BEGIN_POWER_NODE("10.32.0.19", 51, 306, DIRECTION_RIGHT)
-    CHANNEL(1, 1)
-    CHANNEL(2, 2)
+    BEGIN_POWER_NODE("10.32.0.38", 51, 306, DIRECTION_RIGHT)
+    CHANNEL(1, 2)
+    CHANNEL(2, 1)
     END_POWER_NODE
     
     BEGIN_POWER_NODE("10.32.0.20", 51, 306, DIRECTION_RIGHT)
