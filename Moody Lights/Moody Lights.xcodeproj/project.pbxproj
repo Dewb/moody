@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		5B03B0691753CCC90090E4BA /* MessageMappingOscPacketListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageMappingOscPacketListener.h; sourceTree = "<group>"; };
+		5B03B06A1753CCC90090E4BA /* OscException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscException.h; sourceTree = "<group>"; };
+		5B03B06B1753CCC90090E4BA /* OscHostEndianness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscHostEndianness.h; sourceTree = "<group>"; };
+		5B03B06C1753CCC90090E4BA /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscOutboundPacketStream.cpp; sourceTree = "<group>"; };
+		5B03B06D1753CCC90090E4BA /* OscOutboundPacketStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscOutboundPacketStream.h; sourceTree = "<group>"; };
+		5B03B06E1753CCC90090E4BA /* OscPacketListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscPacketListener.h; sourceTree = "<group>"; };
+		5B03B06F1753CCC90090E4BA /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscPrintReceivedElements.cpp; sourceTree = "<group>"; };
+		5B03B0701753CCC90090E4BA /* OscPrintReceivedElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscPrintReceivedElements.h; sourceTree = "<group>"; };
+		5B03B0711753CCC90090E4BA /* OscReceivedElements.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscReceivedElements.cpp; sourceTree = "<group>"; };
+		5B03B0721753CCC90090E4BA /* OscReceivedElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
+		5B03B0731753CCC90090E4BA /* OscTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
+		5B03B0741753CCC90090E4BA /* OscTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
 		5B1BEF8E173CA4C8004989D4 /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cpp; path = ../src/color.cpp; sourceTree = "<group>"; };
 		5B1BEF8F173CA4C8004989D4 /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = color.h; path = ../src/color.h; sourceTree = "<group>"; };
 		5B1BEF90173CA4C8004989D4 /* effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../src/effects.cpp; sourceTree = "<group>"; };
@@ -18,9 +30,30 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		5B03B0681753CCC90090E4BA /* osc */ = {
+			isa = PBXGroup;
+			children = (
+				5B03B0691753CCC90090E4BA /* MessageMappingOscPacketListener.h */,
+				5B03B06A1753CCC90090E4BA /* OscException.h */,
+				5B03B06B1753CCC90090E4BA /* OscHostEndianness.h */,
+				5B03B06C1753CCC90090E4BA /* OscOutboundPacketStream.cpp */,
+				5B03B06D1753CCC90090E4BA /* OscOutboundPacketStream.h */,
+				5B03B06E1753CCC90090E4BA /* OscPacketListener.h */,
+				5B03B06F1753CCC90090E4BA /* OscPrintReceivedElements.cpp */,
+				5B03B0701753CCC90090E4BA /* OscPrintReceivedElements.h */,
+				5B03B0711753CCC90090E4BA /* OscReceivedElements.cpp */,
+				5B03B0721753CCC90090E4BA /* OscReceivedElements.h */,
+				5B03B0731753CCC90090E4BA /* OscTypes.cpp */,
+				5B03B0741753CCC90090E4BA /* OscTypes.h */,
+			);
+			name = osc;
+			path = ../src/osc;
+			sourceTree = "<group>";
+		};
 		5B1BEF83173CA45A004989D4 = {
 			isa = PBXGroup;
 			children = (
+				5B03B0681753CCC90090E4BA /* osc */,
 				5B1BEF8E173CA4C8004989D4 /* color.cpp */,
 				5B1BEF8F173CA4C8004989D4 /* color.h */,
 				5B1BEF90173CA4C8004989D4 /* effects.cpp */,
@@ -172,6 +205,7 @@
 				5B1BEF8D173CA45A004989D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
